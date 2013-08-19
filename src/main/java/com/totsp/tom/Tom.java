@@ -33,7 +33,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  *
  */
-public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T> {
+public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T>, Serializable {
 
     private static Introspector INTROSPECTOR;
 
@@ -63,7 +63,7 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T> {
     @Override
     public From select(String propertyExpression) {
         checkNotNull(propertyExpression, "You must provide at least one property expression.");
-        this.selector = new PropertySelectionFunction<T>(INTROSPECTOR, propertyExpression);
+        this.selector = new PropertySelectionFunction<T>(propertyExpression);
         return this;
     }
 
@@ -75,8 +75,18 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T> {
         if(propertyExpressions != null){
             Collections.addAll(linkedList, propertyExpressions);
         }
-        this.selector = new PropertiesSelectorFunction<T>(INTROSPECTOR, linkedList);
+        this.selector = new PropertiesSelectorFunction<T>(linkedList);
         return this;
+    }
+
+    @Override
+    public <R> Iterable<R> all() {
+        return Iterables.transform(source, (Function<? super T,? extends R>) this.selector);
+    }
+
+    @Override
+    public <R> void into(Collection<R> collection) {
+        Iterables.addAll(collection, (Iterable<? extends R>) source);
     }
 
     public static void initialize(Introspector introspector){
@@ -127,18 +137,6 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T> {
 
     public static <T> Predicate<T> all(Predicate<T>... predicates){
         return new All<T>(predicates);
-    }
-
-    @Override
-    public <R> Iterable<R> all() {
-        return Iterables.transform(source, (Function<? super T,? extends R>) this.selector);
-    }
-
-    @Override
-    public <R> void into(Collection<R> collection) {
-        for(R r : (Iterable<R>) this.all()){
-            collection.add(r);
-        }
     }
 
     public static Introspector getIntrospector() {
