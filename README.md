@@ -52,7 +52,7 @@ For example, fo find people who have an address in the 30308 zip code you might 
     tom().select().from(people).where(eq("addresses.zip", "30308")).asIterable();
 
 Property expressions can also be used as part of the `select()` method. You can select just one property from each
-of the objects. To find a all the last names in the collection, you might use:
+of the objects. To find a `Set` of all the last names in the collection, you might use:
 
     Set<String> lastNames = new HashSet<String>();
     tom().select("lastName").from(people).every().into(lastNames);
