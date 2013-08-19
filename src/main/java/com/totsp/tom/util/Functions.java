@@ -5,11 +5,7 @@ import com.google.common.base.Function;
 import javax.annotation.Nullable;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Robert
- * Date: 8/19/13
- * Time: 2:48 PM
- * To change this template use File | Settings | File Templates.
+ * Utility Functions.
  */
 public class Functions {
 

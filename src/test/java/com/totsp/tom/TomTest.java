@@ -7,8 +7,10 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import static com.google.common.collect.Iterables.concat;
 import static com.totsp.tom.Tom.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -72,6 +74,21 @@ public class TomTest {
         assertEquals("Doe", selected.get(1).getLastName());
     }
 
+    @Test
+    public void weirdCaseTest(){
+        Tom.initialize(new JVMIntrospector());
+        List<Person> people = Arrays.asList(
+                new Person("Sherlock", "Holmes", new Address("221B Baker St", "London", "GA", "30308")),
+                new Person("Homer", "Simpson", new Address("742 Evergreen Tr", "Springfield", "KY", "42082"), new Address("555 Main St.", "Nowhere", "Georgia", "30308")),
+                new Person("John", "Doe", new Address("1234 Broadway", "New York", "NY", "10001")),
+                new Person("Jane", "Doe", new Address("1235 Broadway", "New York", "NY", "10002"))
+        );
 
+        ArrayList<HashMap<String,String>> selected = new ArrayList<HashMap<String,String>>();
+        tom().select("street", "zip").from(
+                concat(tom().select("addresses").from(people).every().asIterable()))
+        .where(eq("zip", "30308")).into(selected);
+        System.out.println(selected);
+    }
 
 }
