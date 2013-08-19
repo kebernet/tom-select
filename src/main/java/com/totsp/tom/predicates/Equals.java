@@ -1,35 +1,23 @@
 package com.totsp.tom.predicates;
 
-import com.google.common.base.Predicate;
-import com.totsp.gwittir.introspection.Introspector;
-import com.totsp.tom.util.Beans;
+import com.google.common.base.Objects;
 
-import javax.annotation.Nullable;
+import java.io.Serializable;
 
 /**
  *
  */
-public class Equals<T, P> implements Predicate<T> {
-
-    private final Introspector introspector;
+public class Equals<T, P extends Serializable> extends AbstractOpPredicate<T, P>{
     private final P value;
-    private final String propertyExpression;
 
-    public Equals(Introspector introspector, P value, String propertyExpression) {
-        this.introspector = introspector;
+    public Equals(P value, String propertyExpression) {
+        super(propertyExpression);
         this.value = value;
-        this.propertyExpression = propertyExpression;
+
     }
 
-
     @Override
-    public boolean apply(@Nullable T t) {
-        if(t != null){
-            P read = Beans.read(this.introspector, propertyExpression, t);
-            if(read == value || (value != null && value.equals(read))){
-                return true;
-            }
-        }
-        return false;
+    protected boolean applyInternal(P read) {
+        return Objects.equal(read, value);
     }
 }

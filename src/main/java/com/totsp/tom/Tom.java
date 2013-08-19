@@ -12,15 +12,18 @@ import com.totsp.tom.interfaces.Select;
 import com.totsp.tom.interfaces.Where;
 import com.totsp.tom.predicates.All;
 import com.totsp.tom.predicates.Any;
+import com.totsp.tom.predicates.Contains;
 import com.totsp.tom.predicates.Equals;
 import com.totsp.tom.predicates.GreaterThan;
 import com.totsp.tom.predicates.GreaterThanOrEqual;
 import com.totsp.tom.predicates.LessThan;
 import com.totsp.tom.predicates.LessThanOrEqual;
 import com.totsp.tom.predicates.Not;
+import com.totsp.tom.util.Functions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -33,15 +36,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T> {
 
     private static Introspector INTROSPECTOR;
-    private static final Function<?, ?> IDENTITY = new Function<Object, Object>() {
-        @Nullable
-        @Override
-        public Object apply(@Nullable Object t) {
-            return t;
-        }
-    };
-
-
 
     private Iterable<T> source;
     private Function<T, ?> selector;
@@ -60,46 +54,9 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T> {
         return this;
     }
 
-    public static void initialize(Introspector introspector){
-        INTROSPECTOR = introspector;
-    }
-
-    public static <T> Tom<T> Tom(){
-        return new Tom<T>();
-    }
-
-    public static <T, P> Predicate<T> eq(String propertyExpression, P value){
-        return new Equals<T, P>(INTROSPECTOR, value, propertyExpression);
-    }
-
-    public static <T, P extends Comparable> Predicate<T> lt(@Nonnull String propertyExpression, @Nullable P value){
-        checkNotNull(propertyExpression, "You must supply a property expression.");
-        return new LessThan<T, P>(INTROSPECTOR, value, propertyExpression);
-    }
-
-    public static <T, P extends Comparable> Predicate<T> ltEq(@Nonnull String propertyExpression, @Nullable P value){
-        checkNotNull(propertyExpression, "You must supply a property expression.");
-        return new LessThanOrEqual<T, P>(INTROSPECTOR, value, propertyExpression);
-    }
-
-    public static <T, P extends Comparable> Predicate<T> gt(@Nonnull String propertyExpression, @Nullable P value){
-        checkNotNull(propertyExpression, "You must supply a property expression.");
-        return new GreaterThan<T, P>(INTROSPECTOR, value, propertyExpression);
-    }
-
-    public static <T, P extends Comparable> Predicate<T> gtEq(@Nonnull String propertyExpression, @Nullable P value){
-        checkNotNull(propertyExpression, "You must supply a property expression.");
-        return new GreaterThanOrEqual<T,P>(INTROSPECTOR, value, propertyExpression);
-    }
-
-    public static <T> Predicate<T> not(@Nonnull Predicate<T> predicate) {
-        checkNotNull(predicate, "You must supply a predicate function");
-        return new Not<T>(predicate);
-    }
-
     @Override
     public From select() {
-        this.selector = (Function<T, ?>) IDENTITY;
+        this.selector = (Function<T, ?>) Functions.IDENTITY;
         return this;
     }
 
@@ -122,12 +79,50 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T> {
         return this;
     }
 
+    public static void initialize(Introspector introspector){
+        INTROSPECTOR = introspector;
+    }
+
+    public static <T, P extends Serializable, R extends Predicate<T> & Serializable> R eq(String propertyExpression, P value){
+        return (R) new Equals<T, P>(value, propertyExpression);
+    }
+
+    public static <T, P extends Comparable & Serializable, R extends Predicate<T> & Serializable> R lt(@Nonnull String propertyExpression, @Nullable P value){
+        checkNotNull(propertyExpression, "You must supply a property expression.");
+        return (R) new LessThan<T, P>(value, propertyExpression);
+    }
+
+    public static <T, P extends Comparable & Serializable, R extends Predicate<T> & Serializable> R ltEq(@Nonnull String propertyExpression, @Nullable P value){
+        checkNotNull(propertyExpression, "You must supply a property expression.");
+        return (R) new LessThanOrEqual<T, P>(value, propertyExpression);
+    }
+
+    public static <T, P extends Comparable & Serializable, R extends Predicate<T> & Serializable> R gt(@Nonnull String propertyExpression, @Nullable P value){
+        checkNotNull(propertyExpression, "You must supply a property expression.");
+        return (R) new GreaterThan<T, P>(value, propertyExpression);
+    }
+
+    public static <T, P extends Comparable & Serializable, R extends Predicate<T> & Serializable> R gtEq(@Nonnull String propertyExpression, @Nullable P value){
+        checkNotNull(propertyExpression, "You must supply a property expression.");
+        return (R) new GreaterThanOrEqual<T,P>(value, propertyExpression);
+    }
+
+    public static <T, P extends Predicate<T> & Serializable, R extends Predicate<T> & Serializable> R not(@Nonnull P predicate) {
+        checkNotNull(predicate, "You must supply a predicate function");
+        return (R) new Not<T>(predicate);
+    }
+
+    public static <T, P extends Serializable, R extends Predicate<T> & Serializable> R contains(@Nonnull String propertyExpression, @Nullable P value){
+        checkNotNull(propertyExpression, "You must supply a property expression.");
+        return (R) new Contains<T, P>(value, propertyExpression);
+    }
+
     public static <T> Select<T> tom(){
         return new Tom<T>();
     }
 
     public static <T> Predicate<T> any(Predicate<T>... predicates){
-        return new Any(predicates);
+        return new Any<T>(predicates);
     }
 
     public static <T> Predicate<T> all(Predicate<T>... predicates){
@@ -144,5 +139,9 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T> {
         for(R r : (Iterable<R>) this.all()){
             collection.add(r);
         }
+    }
+
+    public static Introspector getIntrospector() {
+        return INTROSPECTOR;
     }
 }

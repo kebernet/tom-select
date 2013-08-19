@@ -1,6 +1,7 @@
 package com.totsp.tom.predicates;
 
 import com.totsp.gwittir.rebind.introspection.JVMIntrospector;
+import com.totsp.tom.Tom;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -13,10 +14,11 @@ public class LessThanTest {
 
     @Test
     public void testCompare(){
+        Tom.initialize(new JVMIntrospector());
 
         TestBean bean1 = new TestBean();
 
-        LessThan lt = new LessThan(new JVMIntrospector(), 1, "intProperty");
+        LessThan lt = new LessThan(1, "intProperty");
         assertTrue(lt.apply(bean1));
 
         bean1.setIntProperty(0);

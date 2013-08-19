@@ -1,16 +1,15 @@
 package com.totsp.tom.predicates;
 
-import com.totsp.gwittir.introspection.Introspector;
-
 import javax.annotation.Nullable;
+import java.io.Serializable;
 
 /**
  *
  */
-public class GreaterThan<T, P extends Comparable> extends Compared<T, P>{
+public class GreaterThan<T, P extends Comparable & Serializable> extends Compared<T, P>{
 
-    public GreaterThan(Introspector introspector, P value, String propertyExpression) {
-        super(introspector, value, propertyExpression);
+    public GreaterThan(P value, String propertyExpression) {
+        super(value, propertyExpression);
     }
 
     @Override

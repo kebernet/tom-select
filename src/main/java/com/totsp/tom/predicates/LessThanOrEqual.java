@@ -1,14 +1,14 @@
 package com.totsp.tom.predicates;
 
-import com.totsp.gwittir.introspection.Introspector;
+import java.io.Serializable;
 
 /**
  *
  */
-public class LessThanOrEqual<T, P extends Comparable> extends Compared<T, P>{
+public class LessThanOrEqual<T, P extends Comparable & Serializable> extends Compared<T, P>{
 
-    public LessThanOrEqual(Introspector introspector, P value, String propertyExpression) {
-        super(introspector, value, propertyExpression);
+    public LessThanOrEqual(P value, String propertyExpression) {
+        super(value, propertyExpression);
     }
 
     @Override

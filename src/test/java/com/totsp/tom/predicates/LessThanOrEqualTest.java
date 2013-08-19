@@ -1,6 +1,7 @@
 package com.totsp.tom.predicates;
 
 import com.totsp.gwittir.rebind.introspection.JVMIntrospector;
+import com.totsp.tom.Tom;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -12,10 +13,11 @@ import static org.junit.Assert.assertTrue;
 public class LessThanOrEqualTest {
     @Test
     public void testCompare() throws Exception {
+        Tom.initialize(new JVMIntrospector());
 
         TestBean bean1 = new TestBean();
 
-        LessThanOrEqual lteq = new LessThanOrEqual(new JVMIntrospector(), 1, "intProperty");
+        LessThanOrEqual lteq = new LessThanOrEqual(1, "intProperty");
         assertTrue(lteq.apply(bean1));
 
         bean1.setIntProperty(0);
@@ -27,13 +29,13 @@ public class LessThanOrEqualTest {
         bean1.setIntProperty(2);
         assertFalse(lteq.apply(bean1));
 
-        lteq = new LessThanOrEqual(new JVMIntrospector(), null, "intProperty");
+        lteq = new LessThanOrEqual(null, "intProperty");
         assertFalse(lteq.apply(bean1));
 
         bean1.setIntProperty(null);
         assertTrue(lteq.apply(bean1));
 
-        lteq = new LessThanOrEqual(new JVMIntrospector(), 1, "intProperty");
+        lteq = new LessThanOrEqual(1, "intProperty");
         assertTrue(lteq.apply(bean1));
 
         bean1.setIntProperty(1);

@@ -1,6 +1,7 @@
 package com.totsp.tom.predicates;
 
 import com.totsp.gwittir.rebind.introspection.JVMIntrospector;
+import com.totsp.tom.Tom;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -13,12 +14,13 @@ public class EqualsTest {
     @Test
     public void testApply() throws Exception {
 
+        Tom.initialize(new JVMIntrospector());
         TestBean testBean1 = new TestBean();
-        Equals eq = new Equals(new JVMIntrospector(), null, "intProperty");
+        Equals eq = new Equals(null, "intProperty");
 
         assertTrue(eq.apply(testBean1));
 
-        eq = new Equals(new JVMIntrospector(), 1, "intProperty");
+        eq = new Equals(1, "intProperty");
         testBean1.setIntProperty(1);
         assertTrue(eq.apply(testBean1));
 
