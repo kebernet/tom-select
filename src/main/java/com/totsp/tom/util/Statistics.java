@@ -6,6 +6,7 @@ import com.google.common.collect.TreeMultiset;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,7 +16,15 @@ import java.util.Map;
  */
 public class Statistics<T extends Comparable<T> & Serializable> implements Collection<T> {
 
-    protected TreeMultiset<T> inner = TreeMultiset.create();
+    protected TreeMultiset<T> inner;
+
+    public Statistics(){
+         inner = TreeMultiset.create();
+    }
+
+    public Statistics(Comparator<T> comparator){
+        inner = TreeMultiset.create(comparator);
+    }
 
     public T mode(){
         Multiset.Entry<T> check = null;

@@ -1,5 +1,6 @@
 package com.totsp.tom;
 
+import com.google.common.collect.Iterables;
 import com.totsp.gwittir.rebind.introspection.JVMIntrospector;
 import com.totsp.tom.predicates.TestBean;
 import org.junit.Test;
@@ -29,17 +30,17 @@ public class TomTest {
 
         Iterable<TestBean> it = tom().select()
                                      .from(beans)
-                                     .where(any(
-                                                ltEq("intProperty", 10),
-                                                gtEq("intProperty", 90))
-                                     ).all();
+                                     .where(anyOf(
+                                             ltEq("intProperty", 10),
+                                             gtEq("intProperty", 90))
+                                     ).asIterable();
         for(TestBean b: it){
             assertTrue(b.getIntProperty() <= 10 || b.getIntProperty() >= 90);
         }
 
         it = tom().select()
                 .from(beans)
-                .where( ltEq("intProperty", 10)).all();
+                .where( ltEq("intProperty", 10)).asIterable();
         for(TestBean b: it){
             assertTrue(b.getIntProperty() <= 10 );
         }
@@ -64,12 +65,13 @@ public class TomTest {
         assertEquals("Simpson", selected.get(1).getLastName());
 
         selected = new ArrayList<Person>();
-        tom().select().from(people).where(any(eq("addresses.zip", "10001"), eq("addresses.zip", "10002"))).into(selected);
+        tom().select().from(people).where(anyOf(eq("addresses.zip", "10001"), eq("addresses.zip", "10002"))).into(selected);
 
         assertEquals(2, selected.size());
         assertEquals("Doe", selected.get(0).getLastName());
         assertEquals("Doe", selected.get(1).getLastName());
     }
+
 
 
 }

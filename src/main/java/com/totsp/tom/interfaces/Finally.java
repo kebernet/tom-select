@@ -7,6 +7,6 @@ import java.util.Collection;
  */
 public interface Finally<T> {
 
-    <R> Iterable<R> all();
+    <R> Iterable<R> asIterable();
     <R> void into(Collection<R> collection);
 }

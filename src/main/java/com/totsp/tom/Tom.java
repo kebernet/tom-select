@@ -40,6 +40,7 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T>, Seriali
     private Iterable<T> source;
     private Function<T, ?> selector;
 
+
     private Tom(){
         super();
     }
@@ -51,6 +52,11 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T>, Seriali
 
     public Finally<T> where(Predicate<T> predicate){
         this.source = Iterables.filter(this.source, predicate);
+        return this;
+    }
+
+    @Override
+    public Finally<T> every() {
         return this;
     }
 
@@ -80,13 +86,13 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T>, Seriali
     }
 
     @Override
-    public <R> Iterable<R> all() {
+    public <R> Iterable<R> asIterable() {
         return Iterables.transform(source, (Function<? super T,? extends R>) this.selector);
     }
 
     @Override
     public <R> void into(Collection<R> collection) {
-        Iterables.addAll(collection, (Iterable<? extends R>) source);
+        Iterables.addAll(collection, (Iterable<R>) asIterable());
     }
 
     public static void initialize(Introspector introspector){
@@ -131,11 +137,11 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T>, Seriali
         return new Tom<T>();
     }
 
-    public static <T> Predicate<T> any(Predicate<T>... predicates){
+    public static <T> Predicate<T> anyOf(Predicate<T>... predicates){
         return new Any<T>(predicates);
     }
 
-    public static <T> Predicate<T> all(Predicate<T>... predicates){
+    public static <T> Predicate<T> allOf(Predicate<T>... predicates){
         return new All<T>(predicates);
     }
 

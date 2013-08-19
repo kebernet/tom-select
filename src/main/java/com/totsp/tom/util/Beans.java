@@ -19,17 +19,12 @@ public class Beans {
         if(introspectable == null){
             return null;
         }
-        LinkedList read = readInternal(i, expression, introspectable);
-        if(read.isEmpty()){
-            return null;
-        } else if(read.getFirst() == read.getLast()){
-            return (P) read.getFirst();
-        } else {
-            return (P) read;
-        }
+        Object read = readInternal(i, expression, introspectable);
+        return (P) read;
+
     }
 
-    private static LinkedList readInternal(Introspector i, String expression, Object introspectable){
+    private static Object readInternal(Introspector i, String expression, Object introspectable){
         LinkedList result = new LinkedList();
         try {
             int dotIndex = expression.indexOf('.');
@@ -45,14 +40,19 @@ public class Beans {
             if(read instanceof Iterable && childExpressions != null){
                 Iterable it = (Iterable) read;
                 for(Object o : it){
-                    result.addAll(readInternal(i, childExpressions, o));
+                    Object child = readInternal(i, childExpressions, o);
+                    if(child instanceof LinkedList){
+                        result.addAll((LinkedList) child);
+                    } else {
+                        result.add(child);
+                    }
                 }
+                return result;
             } else {
-                result.add(read);
+                return read;
             }
         } catch (Exception e) {
             throw new EvaluationException("Unabled to read ["+expression+"] on the "+introspectable.getClass()+"  == "+introspectable, e);
         }
-        return result;
     }
 }

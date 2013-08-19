@@ -14,4 +14,5 @@ import javax.annotation.Nonnull;
 public interface Where<T> {
 
     Finally<T> where(@Nonnull Predicate<T> predicate);
+    Finally<T> every();
 }
