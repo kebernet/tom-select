@@ -73,7 +73,7 @@ into a single `Iterable`, where we select the "street" property where "zip" equa
 Stats
 -----
 
-Another bit of code that is tossed in here, just because I use it with this a lot, is the `Statistic`s class. This
+Another bit of code that is tossed in here, just because I use it with this a lot, is the `Statistics` class. This
 is a collection built around Guava's Multiset that is useful for getting basic statistical information with
 Tom Select. For example, if I wanted to know about the age of the Persons in the people collection:
 
