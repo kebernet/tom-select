@@ -91,8 +91,9 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T>, Seriali
     }
 
     @Override
-    public <R> void into(Collection<R> collection) {
-        Iterables.addAll(collection, (Iterable<R>) asIterable());
+    public  <C extends Collection<?>> C into(C collection) {
+        Iterables.addAll((Collection)collection, asIterable());
+        return collection;
     }
 
     public static void initialize(Introspector introspector){
