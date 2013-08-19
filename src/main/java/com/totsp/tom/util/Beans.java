@@ -4,6 +4,7 @@ import com.totsp.gwittir.introspection.Introspector;
 import com.totsp.tom.exceptions.EvaluationException;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.LinkedList;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -33,11 +34,14 @@ public class Beans {
                 childExpressions = expression.substring(dotIndex + 1);
                 expression = expression.substring(0, dotIndex);
             }
+
             Object read =  i.getDescriptor(introspectable)
                     .getProperty(expression)
                     .getAccessorMethod()
                     .invoke(introspectable, null);
-            if(read instanceof Iterable && childExpressions != null){
+            if("_size".equals(childExpressions) && read instanceof Collection){
+                return ((Collection) read).size();
+            } else if(read instanceof Iterable && childExpressions != null){
                 Iterable it = (Iterable) read;
                 for(Object o : it){
                     Object child = readInternal(i, childExpressions, o);

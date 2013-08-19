@@ -61,5 +61,11 @@ public class StatisticsTest {
         ).every().into(stats);
 
         assertEquals("30308", stats.mode());
+
+        stats = new Statistics<String>();
+        tom().select("addresses._size").from(people).every().into(stats);
+
+        assertEquals(1, stats.mode());
+        System.out.println(stats.histogram());
     }
 }
