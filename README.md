@@ -28,10 +28,10 @@ firstName property equals "Bob". The argument for the `where()` method is just a
 but tom has some utility methods for constructing them based on properties. Let's look at a slightly more
 complex example:
 
-   List<Person> notBobRobertsons = new ArrayList<Person>();
-   tom().select().from(people).where(
-      allOf(eq("firstName, "Bob"), not(eq("lastName", "Robertson")))
-   ).into(notBobRobertsons);
+    List<Person> notBobRobertsons = new ArrayList<Person>();
+    tom().select().from(people).where(
+       allOf(eq("firstName, "Bob"), not(eq("lastName", "Robertson")))
+    ).into(notBobRobertsons);
 
 Here we are selecting all the Bobs who aren't Bob Robertson and adding them to the list of notBobRobertsons. Here
 `allOf()` is just a logical AND (as opposed to `anyOf()` which is the logical OR).
