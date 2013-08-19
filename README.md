@@ -49,7 +49,7 @@ For example, for find people whose boss is Bill Lumbergh, you might use:
 If a property in the expression is a collection, you can find matches on any sub-node of that collection.
 For example, fo find people who have an address in the 30308 zip code you might use:
 
-    tom().select().from(people).where(eq("addresses.zip", "30308")).asIterator();
+    tom().select().from(people).where(eq("addresses.zip", "30308")).asIterable();
 
 Property expressions can also be used as part of the `select()` method. You can select just one property from each
 of the objects. To find a all the last names in the collection, you might use:
