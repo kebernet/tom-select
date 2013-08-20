@@ -1,5 +1,7 @@
 package com.totsp.tom.interfaces;
 
+import com.google.common.base.Function;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -15,4 +17,5 @@ public interface Select<T> {
     From<T> select();
     From<T> select(@Nonnull String propertyExpression);
     From<T> select(@Nonnull String propertyExpression, @Nullable String... propertyExpressions);
+    From<T> select(@Nonnull Function<T, ?> selector);
 }

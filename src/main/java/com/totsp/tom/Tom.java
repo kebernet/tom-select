@@ -24,9 +24,9 @@ import com.totsp.tom.util.Functions;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -76,12 +76,18 @@ public class Tom<T> implements Select<T>, From<T>, Where<T>, Finally<T>, Seriali
     @Override
     public From select(String propertyExpression, String... propertyExpressions) {
         checkNotNull(propertyExpression, "You must provide at least one property expression.");
-        LinkedList<String> linkedList = new LinkedList<String>();
-        linkedList.add(propertyExpression);
+        ArrayList<String> list = new ArrayList<String>(1 + (propertyExpression == null ? 0 : propertyExpression.length()));
+        list.add(propertyExpression);
         if(propertyExpressions != null){
-            Collections.addAll(linkedList, propertyExpressions);
+            Collections.addAll(list, propertyExpressions);
         }
-        this.selector = new PropertiesSelectorFunction<T>(linkedList);
+        this.selector = new PropertiesSelectorFunction<T>(list);
+        return this;
+    }
+
+    @Override
+    public From<T> select(@Nonnull Function<T, ?> selector) {
+        this.selector = selector;
         return this;
     }
 
