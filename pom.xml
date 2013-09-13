@@ -23,7 +23,16 @@
 
     <groupId>com.totsp</groupId>
     <artifactId>tom</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.9</version>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-kebernet-maven-tom-select</id>
+            <name>kebernet-maven-tom-select</name>
+            <url>https://api.bintray.com/maven/kebernet/maven/tom-select</url>
+        </repository>
+    </distributionManagement>
+
 
     <dependencies>
         <dependency>

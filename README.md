@@ -4,6 +4,24 @@ Tom Select
 This is a basic library for working with Java collections built on Guava and Gwittir. It allow for
 LINQ-ish selection from collections as well as sub-graphs.
 
+
+Maven
+-----
+
+    <repository>
+        <id>kebernet</id>
+        <name>kebernet</name>
+        <url>http://dl.bintray.com/kebernet/maven</url>
+    </repository>
+
+    ...
+
+    <dependency>
+        <groupId>com.totsp</groupId>
+        <artifactId>tom</artifactId>
+        <version>0.9</version>
+    </dependency>
+
 Getting Started
 ---------------
 
