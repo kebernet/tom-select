@@ -33,6 +33,14 @@
         </repository>
     </distributionManagement>
 
+    <repositories>
+        <repository>
+            <id>gwittir</id>
+            <name>gwittir</name>
+            <url>http://dl.bintray.com/kebernet/maven</url>
+        </repository>
+    </repositories>
+
 
     <dependencies>
         <dependency>
@@ -43,7 +51,7 @@
         <dependency>
             <groupId>com.totsp.gwittir</groupId>
             <artifactId>introspection</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
